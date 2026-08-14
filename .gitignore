@@ -1,0 +1,11 @@
+# Secrets — never commit these
+.env
+*.key
+*.pem
+id_rsa*
+id_ed25519*
+secrets/
+
+# Noise
+*.log
+.DS_Store
