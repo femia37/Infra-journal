@@ -17,6 +17,8 @@ Written as I go, not reconstructed afterwards.
 | **Firewall** | `ufw`, deny-by-default. Ports 22, 80, 443 open. |
 | **Updates** | `unattended-upgrades` — security patches applied automatically |
 | **Memory** | 2.3 GB swap, swappiness tuned to 10 |
+| **Containers** | Docker CE from the official repository |
+| **Running** | n8n, bound to `127.0.0.1` only, state in a named volume |
 
 ---
 
@@ -39,7 +41,11 @@ from scratch.
 Provisioning, non-root user, SSH key authentication, SSH hardening, firewall,
 swap tuning, automatic security updates. Verified across a reboot.
 
-**Phase 1 — Docker and Docker Compose** *(in progress)*
+**Phase 1 — Docker** *(in progress)*
+Installed from the official repository with signature verification. n8n running
+in a container, bound to localhost, reached over an SSH tunnel. Application state
+persisted in a Docker volume — verified by destroying the container twice, with
+and without a volume attached.
 
 **Phase 2 — Domain, reverse proxy, HTTPS** *(planned)*
 
@@ -62,3 +68,11 @@ still be true after a reboot? Then restart and check.
 
 **When unsure, ask the machine.** Logs and status commands already know what
 happened. Reading them beats guessing.
+
+**Bind services to `127.0.0.1` unless they genuinely need public reach.** Docker
+publishes ports below the host firewall, so `ufw` will not save you.
+
+**Configuration belongs in Git. Data belongs in a volume.**
+
+**Prove behaviour rather than assuming it.** Destroying something deliberately
+teaches the boundary more reliably than reading about it.
